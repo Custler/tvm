@@ -51,17 +51,20 @@ runtime::Module BuildAOCL(Array<LoweredFunc> funcs, std::string target_str,
   runtime::SaveBinaryToFile("aocl.cl", code.c_str());
 
   // Compile the .cl file.
-  std::string cmd = "aoc aocl.cl";
+  std::string cmd = "aoc aocl.cl -v";
   // AOCL supports fp64.
   cmd += " -Dcl_khr_fp64";
   Target target = Target::Create(target_str);
   if (target->device_name != "") {
     cmd += " -board=" + target->device_name;
   }
+  std::cout <<"\n" << "Board: " << target->device_name << "\n";
   if (emulation) {
-    cmd += " -march=emulator";
+    // the default '-fast-emulator' error in comb U1804 + 19.2pro
+    cmd += " -march=emulator -legacy-emulator";
   }
-  if (system(cmd.c_str()) != 0) {
+ std::cout <<"\n" << "COMMAND: " << cmd.c_str() << "\n";
+ if (system(cmd.c_str()) != 0) {
     LOG(FATAL) << "OpenCL offline compilation error.";
   }
 

@@ -407,7 +407,8 @@ def _resize_bilinear():
         attr['layout'] = 'NHWC'
 
         return AttrCvt(op_name="resize",
-                       ignores=['Tdim'],
+                       # half_pixel_centers - not implemented
+                       ignores=['Tdim', 'half_pixel_centers'],
                        extras={'method': "bilinear"})(inputs, attr)
     return _impl
 

@@ -371,6 +371,10 @@ class AttrCvt(object):
         # convert attributes
         new_attrs = {}
         for k in attrs.keys():
+            # === avoid error
+            if k == 'explicit_paddings':
+                continue
+            # ==============
             if k in self._excludes:
                 raise NotImplementedError('Attribute %s in operator %s is not' +
                                           ' supported.', k, op_name)
