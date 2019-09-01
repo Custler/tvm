@@ -14,26 +14,22 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+#pylint: disable=unused-argument
+"""The register functions for the QNN dialect."""
+from tvm.relay.op.op import register as register
 
-import tvm
-import numpy as np
-import tsim
+def register_qnn_legalize(op_name, legal_op=None, level=10):
+    """Register legal transformation function for a QNN op
 
-def test_accel():
-    rmax = 64
-    dtype = "uint64"
-    n = np.random.randint(1, rmax)
-    c = np.random.randint(0, rmax)
-    ctx = tvm.cpu(0)
-    a = tvm.nd.array(np.random.randint(rmax, size=n).astype(dtype), ctx)
-    b = tvm.nd.array(np.zeros(n).astype(dtype), ctx)
-    f = tsim.load_module()
-    cycles = f(a, b, c)
-    msg = "cycles:{0:4} n:{1:2} c:{2:2}".format(cycles, n, c)
-    np.testing.assert_equal(b.asnumpy(), a.asnumpy() + c, err_msg = "[FAIL] " + msg)
-    print("[PASS] " + msg)
+    Parameters
+    ----------
+    op_name : str
+        The name of the operator
 
-if __name__ == "__main__":
-    tsim.init("chisel")
-    for i in range(10):
-        test_accel()
+    legal_op: function (attrs: Attrs, inputs: List[Expr]) -> new_expr: Expr
+        The function for transforming an expr to another expr.
+
+    level : int
+        The priority level
+    """
+    return register(op_name, "FTVMQnnLegalize", legal_op, level)
