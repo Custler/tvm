@@ -27,6 +27,7 @@
 #include "codegen_vhls.h"
 #include "build_common.h"
 #include "../runtime/opencl/sdaccel/sdaccel_module.h"
+#include "../runtime/file_util.h"
 
 namespace tvm {
 namespace codegen {
@@ -160,6 +161,12 @@ runtime::Module BuildSDAccel(Array<LoweredFunc> funcs, std::string target_str) {
   } else {
     LOG(FATAL) << "Cannot compile Vivado HLS code.";
   }
+
+  // ==============================
+  // ==== Write a code files =======
+  runtime::SaveBinaryToFile("Vivado_HLS_code.xclbin", xclbin.c_str());
+  // ==============================
+
   return SDAccelModuleCreate(xclbin, "xclbin", ExtractFuncInfo(funcs), whole_code);
 }
 

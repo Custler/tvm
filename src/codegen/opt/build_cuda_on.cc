@@ -36,6 +36,7 @@
 #include "../build_common.h"
 #include "../../runtime/cuda/cuda_common.h"
 #include "../../runtime/cuda/cuda_module.h"
+#include "../../runtime/file_util.h"
 
 
 namespace tvm {
@@ -152,6 +153,12 @@ runtime::Module BuildCUDA(Array<LoweredFunc> funcs) {
   } else {
     ptx = NVRTCCompile(code, cg.need_include_path());
   }
+  // ==============================
+  // ==== Write a code files =======
+  runtime::SaveBinaryToFile("Cuda_code.code", code.c_str());
+  runtime::SaveBinaryToFile("Cuda_code.ptx", ptx.c_str());
+  // ==============================
+
   return CUDAModuleCreate(ptx, fmt, ExtractFuncInfo(funcs), code);
 }
 

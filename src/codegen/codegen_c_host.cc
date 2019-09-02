@@ -26,6 +26,7 @@
 #include <string>
 #include "codegen_c_host.h"
 #include "build_common.h"
+#include "../runtime/file_util.h"
 
 namespace tvm {
 namespace codegen {
@@ -284,6 +285,10 @@ runtime::Module BuildCHost(Array<LoweredFunc> funcs) {
     cg.AddFunction(f);
   }
   std::string code = cg.Finish();
+
+  // Write a .cl file.
+  runtime::SaveBinaryToFile("Host_c.c", code.c_str());
+
   return CSourceModuleCreate(code, "c");
 }
 

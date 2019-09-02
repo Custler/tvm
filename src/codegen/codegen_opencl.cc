@@ -28,6 +28,7 @@
 #include "build_common.h"
 #include "../runtime/thread_storage_scope.h"
 #include "../runtime/opencl/opencl_module.h"
+#include "../runtime/file_util.h"
 
 namespace tvm {
 namespace codegen {
@@ -272,6 +273,10 @@ runtime::Module BuildOpenCL(Array<LoweredFunc> funcs) {
   if (const auto* f = Registry::Get("tvm_callback_opencl_postproc")) {
     code = (*f)(code).operator std::string();
   }
+
+  // Write a .cl file.
+  runtime::SaveBinaryToFile("opencl.cl", code.c_str());
+
   return OpenCLModuleCreate(code, "cl", ExtractFuncInfo(funcs), code);
 }
 
