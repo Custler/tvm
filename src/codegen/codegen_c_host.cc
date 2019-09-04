@@ -286,7 +286,7 @@ runtime::Module BuildCHost(Array<LoweredFunc> funcs) {
   }
   std::string code = cg.Finish();
 
-  // Write a .cl file.
+  // Write a intermetiate file.
   runtime::SaveBinaryToFile("Host_c.c", code.c_str());
 
   return CSourceModuleCreate(code, "c");
