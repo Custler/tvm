@@ -1,13 +1,15 @@
-####################################################
-# Visialization work JUPITER NOTEBOOK in CHROME ONLY
-####################################################
+#####################################################################
+# Visialization work on JUPITER NOTEBOOK. View result in CHROME ONLY
+#####################################################################
 # tvm, relay
 import tvm
 from tvm import relay
 
 # os and numpy
 import numpy as np
+import os
 import os.path
+import platform
 
 # Tensorflow imports
 import tensorflow as tf
@@ -18,10 +20,22 @@ import tvm.relay.testing.tf as tf_testing
 from IPython.display import clear_output, Image, display, HTML
 
 ########## Model Files #############
-img_path = 'C:\\Users\\SVT\\.tvm_test_data\\data\\elephant-299.jpg'
-model_path = "c:\\Users\SVT\\.tvm_test_data\\tf\\InceptionV1\\classify_image_graph_def-with_shapes.pb"
-map_proto_path = "C:\\Users\\SVT\\.tvm_test_data\\data\\imagenet_2012_challenge_label_map_proto.pbtxt"
-label_path = "C:\\Users\\SVT\\.tvm_test_data\\data\\imagenet_synset_to_human_label_map.txt"
+if platform.system() == 'Windows':
+    UserHome = os.environ['USERPROFILE']
+    img_path = "UserHome\\.tvm_test_data\\data\\elephant-299.jpg"
+    model_path = "UserHome\\.tvm_test_data\\tf\\InceptionV1\\classify_image_graph_def-with_shapes.pb"
+    map_proto_path = "UserHome\\.tvm_test_data\\data\\imagenet_2012_challenge_label_map_proto.pbtxt"
+    label_path = "UserHome\\.tvm_test_data\\data\\imagenet_synset_to_human_label_map.txt"
+elif platform.system() == 'Linux':
+    UserHome = os.environ['HOME']
+    img_path = "UserHome/.tvm_test_data/data/elephant-299.jpg"
+    model_path = "UserHome/.tvm_test_data/tf/InceptionV1/classify_image_graph_def-with_shapes.pb"
+    map_proto_path = "UserHome/.tvm_test_data/data/imagenet_2012_challenge_label_map_proto.pbtxt"
+    label_path = "UserHome/.tvm_test_data/data/imagenet_synset_to_human_label_map.txt"
+else:
+    print("Unknown OS")
+    exit(self, 1)
+
 
 ######################################################################
 print(" =!=!=!= Import model")
