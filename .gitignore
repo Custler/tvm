@@ -232,4 +232,3 @@ conda/pkg
 # antlr files
 *.tokens
 *.interp
-.vs/
