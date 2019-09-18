@@ -14,10 +14,19 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# pylint: disable=wildcard-import
-"""QNN dialect related operators."""
-from __future__ import absolute_import as _abs
-from .qnn import *
-from .op import register_qnn_legalize
-from . import legalizations
-from . import op_attrs
+from tvm.relay.frontend.common import StrAttrsDict
+
+
+def test_key_is_present():
+    attrs = StrAttrsDict({"a": 1})
+    assert attrs.has_attr("a")
+
+
+def test_key_is_not_present():
+    attrs = StrAttrsDict({"a": 1})
+    assert not attrs.has_attr("b")
+
+
+if __name__ == '__main__':
+    test_key_is_present()
+    test_key_is_present()
